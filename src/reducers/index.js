@@ -1,18 +1,17 @@
-const initialState = {
-  title: 'Welcome to React'
+import { combineReducers } from 'redux';
+import app from './app';
+import counter from './counter';
+
+const contextualize = (reducer, key) => (state, action) => {
+  if (action.target !== undefined && action.target !== key) {
+    return state;
+  }
+
+  return reducer(state, action);
 };
 
-const handlers = {};
-
-handlers['app/UPDATE_TITLE'] = (state, { payload }) => ({
-  ...state,
-  title: payload || initialState.title
+export default combineReducers({
+  app,
+  counter1: contextualize(counter, 'counter1'),
+  counter2: contextualize(counter, 'counter2')
 });
-
-const rootReducer = (state = initialState, action) => {
-  const handler = handlers[action.type];
-
-  return handler ? handler(state, action) : state;
-};
-
-export default rootReducer;

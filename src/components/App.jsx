@@ -20,11 +20,11 @@ class App extends Component {
         <div className="App">
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">{state.title}</h1>
+            <h1 className="App-title">{state.app.title}</h1>
           </header>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-            <Counter />
-            <Counter />
+            <Counter reduxKey="counter1" />
+            <Counter reduxKey="counter2" />
           </div>
         </div>
       </Provider>
