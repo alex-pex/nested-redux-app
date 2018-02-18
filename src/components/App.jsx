@@ -1,47 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import logo from './logo.svg';
 import './App.css';
 import Counter from './Counter';
+import provideApp from '../containers/provideApp';
 
-class App extends Component {
-  static childContextTypes = {
-    app: PropTypes.shape({
-      title: PropTypes.string,
-      onTitleChange: PropTypes.func
-    })
-  };
+const App = (props, { app }) => (
+  <div className="App">
+    <header className="App-header">
+      <img src={logo} className="App-logo" alt="logo" />
+      <h1 className="App-title">{app.title}</h1>
+    </header>
+    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+      <Counter />
+      <Counter />
+    </div>
+  </div>
+);
 
-  state = {
-    title: 'Welcome to React'
-  };
+App.contextTypes = {
+  app: PropTypes.shape({
+    title: PropTypes.string
+  })
+};
 
-  getChildContext() {
-    return {
-      app: {
-        title: this.state.title,
-        setTitle: title => this.setState({ title })
-      }
-    };
-  }
-
-  render() {
-    const { title } = this.state;
-
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">{title}</h1>
-        </header>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-          <Counter />
-          <Counter />
-        </div>
-      </div>
-    );
-  }
-}
-
-export default App;
+export default provideApp(App);
