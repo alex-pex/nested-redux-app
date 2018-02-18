@@ -7,11 +7,11 @@ import Counter from './Counter';
 import provideContext from '../containers/provideContext';
 import app from '../contexts/app';
 
-const App = (props, context) => (
+const App = ({ title }) => (
   <div className="App">
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
-      <h1 className="App-title">{context.app.title}</h1>
+      <h1 className="App-title">{title}</h1>
     </header>
     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
       <Counter />
@@ -20,10 +20,12 @@ const App = (props, context) => (
   </div>
 );
 
-App.contextTypes = {
-  app: PropTypes.shape({
-    title: PropTypes.string
-  })
+App.propTypes = {
+  title: PropTypes.string.isRequired
 };
 
-export default provideContext({ app })(App);
+const mapContextToProps = context => ({
+  title: context.app.title
+});
+
+export default provideContext({ app }, mapContextToProps)(App);

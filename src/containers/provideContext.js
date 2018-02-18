@@ -1,16 +1,9 @@
 import { Component, createElement } from 'react';
 import PropTypes from 'prop-types';
+import objectMap from './objectMap';
 
-const objectMap = (source, mapper) => {
-  const result = {};
-  Object.entries(source).forEach(([key, value]) => {
-    result[key] = mapper(value, key);
-  });
-  return result;
-};
-
-const provideContext = (contexts = {}) => WrappedComponent =>
-  class ContextContainer extends Component {
+const provideContext = (contexts = {}, mapContextToProps) => WrappedComponent =>
+  class ContextProvider extends Component {
     static childContextTypes = objectMap(contexts, context => PropTypes.shape(context.childContextTypes).isRequired);
 
     state = objectMap(contexts, context => context.initialState);
@@ -38,7 +31,8 @@ const provideContext = (contexts = {}) => WrappedComponent =>
     }
 
     render() {
-      return createElement(WrappedComponent, this.props);
+      const contextualProps = mapContextToProps ? mapContextToProps(this.state, this.props) : {};
+      return createElement(WrappedComponent, { ...this.props, ...contextualProps });
     }
   };
 
