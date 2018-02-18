@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import logo from './logo.svg';
 import './App.css';
 import Counter from './Counter';
-import provideApp from '../containers/provideApp';
+import provideContext from '../containers/provideContext';
+import app from '../contexts/app';
 
-const App = (props, { app }) => (
+const App = (props, context) => (
   <div className="App">
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
-      <h1 className="App-title">{app.title}</h1>
+      <h1 className="App-title">{context.app.title}</h1>
     </header>
     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
       <Counter />
@@ -25,4 +26,4 @@ App.contextTypes = {
   })
 };
 
-export default provideApp(App);
+export default provideContext({ app })(App);

@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import provideContext from './provideContext';
 
 const counter = {
   childContextTypes: {
@@ -16,4 +15,4 @@ const counter = {
   })
 };
 
-export default provideContext({ counter });
+export default counter;

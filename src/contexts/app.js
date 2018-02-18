@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import provideContext from './provideContext';
 
 const app = {
   childContextTypes: {
@@ -17,4 +16,4 @@ const app = {
   })
 };
 
-export default provideContext({ app });
+export default app;
