@@ -1,17 +1,36 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Provider, PropTypes as MobxPropTypes, inject } from 'mobx-react';
+
 import logo from './logo.svg';
 import './App.css';
+import Counter from './Counter';
 
-const App = () => (
+const App = ({ title, counters }) => (
   <div className="App">
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
-      <h1 className="App-title">Welcome to React</h1>
+      <h1 className="App-title">{title}</h1>
     </header>
-    <p className="App-intro">
-      To get started, edit <code>src/App.js</code> and save to reload.
-    </p>
+    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+      {counters.map((counter, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Provider key={index} counter={counter}>
+          <Counter />
+        </Provider>
+      ))}
+    </div>
   </div>
 );
 
-export default App;
+App.propTypes = {
+  title: PropTypes.string.isRequired,
+  counters: MobxPropTypes.arrayOrObservableArray.isRequired
+};
+
+const mapStoresToProps = ({ store }) => ({
+  title: store.title,
+  counters: store.counters
+});
+
+export default inject(mapStoresToProps)(App);

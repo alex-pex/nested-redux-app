@@ -6,6 +6,8 @@
     "prettier/prettier": ["error", {
         "printWidth": 120,
         "singleQuote": true
-    }]
+    }],
+    "react/forbid-prop-types": "off",
+    "react/no-typos": "off"
   }
 }
