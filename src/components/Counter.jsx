@@ -1,35 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { updateTitle, incrementCounter } from '../actions';
+import { connectStore } from 'redux-box';
+import app from '../modules/app';
+import counters from '../modules/counters';
 
-const Counter = ({ title, value, onTitleChange, onButtonClick }) => (
+const Counter = ({ app, counters, index }) => (
   <div style={{ margin: '0 10px' }}>
     <h3>Local state</h3>
     <p>
-      <strong>{value}</strong> click(s)
+      <strong>{counters[index].value}</strong> click(s)
     </p>
-    <button onClick={onButtonClick}>clickMe!</button>
+    <button onClick={() => counters.incrementCounter(index)}>clickMe!</button>
     <h3>Global state</h3>
-    <input type="text" value={title} onChange={onTitleChange} />
+    <input type="text" value={app.title} onChange={event => app.updateTitle(event.target.value)} />
   </div>
 );
 
 Counter.propTypes = {
-  title: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
-  onTitleChange: PropTypes.func.isRequired,
-  onButtonClick: PropTypes.func.isRequired
+  app: PropTypes.object.isRequired,
+  counters: PropTypes.arrayOf(PropTypes.object).isRequired,
+  index: PropTypes.number.isRequired
 };
 
-const mapStateToProps = (state, { reduxKey }) => ({
-  title: state.app.title,
-  value: state[reduxKey].value
-});
-
-const mapDispatchToProps = (dispatch, { reduxKey }) => ({
-  onTitleChange: event => dispatch(updateTitle(event.target.value)),
-  onButtonClick: () => dispatch(incrementCounter(reduxKey))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Counter);
+export default connectStore({ app, counters })(Counter);

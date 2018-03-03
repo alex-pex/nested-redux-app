@@ -23,8 +23,8 @@ class App extends Component {
             <h1 className="App-title">{state.app.title}</h1>
           </header>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-            <Counter reduxKey="counter1" />
-            <Counter reduxKey="counter2" />
+            <Counter index={0} />
+            <Counter index={1} />
           </div>
         </div>
       </Provider>
