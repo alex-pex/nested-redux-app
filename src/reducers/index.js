@@ -1,17 +1,25 @@
 import { combineReducers } from 'redux';
-import app from './app';
-import counter from './counter';
+import { denormalize } from 'normalizr';
 
-const contextualize = (reducer, key) => (state, action) => {
-  if (action.target !== undefined && action.target !== key) {
-    return state;
+import app, { appSchema } from './app';
+import counters from './counters';
+
+const initialState = {
+  app: {
+    title: 'Hello world!',
+    counter1: 1,
+    counter2: 2
+  },
+  counters: {
+    1: { id: 1, value: 123 },
+    2: { id: 2, value: 456 }
   }
-
-  return reducer(state, action);
 };
+
+const appData = denormalize(initialState.app, appSchema, initialState);
+console.log(appData);
 
 export default combineReducers({
   app,
-  counter1: contextualize(counter, 'counter1'),
-  counter2: contextualize(counter, 'counter2')
+  counters
 });

@@ -1,16 +1,28 @@
+import { counterSchema } from './counters';
+
+export const appSchema = {
+  counter1: counterSchema,
+  counter2: counterSchema
+};
+
 const initialState = {
   title: 'Welcome to React'
 };
 
-const handlers = {};
+export const updateTitle = title => ({
+  type: 'app/UPDATE_TITLE',
+  title
+});
 
-handlers.UPDATE_TITLE = (state, { payload }) => ({
+const actionHandlers = {};
+
+actionHandlers['app/UPDATE_TITLE'] = (state, { title }) => ({
   ...state,
-  title: payload || initialState.title
+  title: title || initialState.title
 });
 
 const reducer = (state = initialState, action) => {
-  const handler = handlers[action.type];
+  const handler = actionHandlers[action.type];
 
   return handler ? handler(state, action) : state;
 };

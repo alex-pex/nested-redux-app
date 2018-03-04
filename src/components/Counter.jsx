@@ -1,35 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { updateTitle, incrementCounter } from '../actions';
+import { updateTitle } from '../reducers/app';
+import { incrementCounter } from '../reducers/counters';
 
-const Counter = ({ title, value, onTitleChange, onButtonClick }) => (
+const Counter = ({ app, counter }) => (
   <div style={{ margin: '0 10px' }}>
     <h3>Local state</h3>
     <p>
-      <strong>{value}</strong> click(s)
+      <strong>{counter.value}</strong> click(s)
     </p>
-    <button onClick={onButtonClick}>clickMe!</button>
+    <button onClick={counter.increment}>clickMe!</button>
     <h3>Global state</h3>
-    <input type="text" value={title} onChange={onTitleChange} />
+    <input type="text" value={app.title} onChange={event => app.setTitle(event.target.value)} />
   </div>
 );
 
-Counter.propTypes = {
+const AppShape = PropTypes.shape({
   title: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
-  onTitleChange: PropTypes.func.isRequired,
-  onButtonClick: PropTypes.func.isRequired
+  setTitle: PropTypes.func.isRequired
+});
+
+const CounterShape = PropTypes.shape({
+  value: PropTypes.number,
+  increment: PropTypes.func.isRequired
+});
+
+Counter.propTypes = {
+  app: AppShape.isRequired, // eslint-disable-line react/no-typos
+  counter: CounterShape.isRequired // eslint-disable-line react/no-typos
 };
 
-const mapStateToProps = (state, { reduxKey }) => ({
-  title: state.app.title,
-  value: state[reduxKey].value
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  app: {
+    ...ownProps.app,
+    setTitle: value => dispatch(updateTitle(value))
+  },
+  counter: {
+    ...ownProps.counter,
+    increment: () => dispatch(incrementCounter(ownProps.counter.id))
+  }
 });
 
-const mapDispatchToProps = (dispatch, { reduxKey }) => ({
-  onTitleChange: event => dispatch(updateTitle(event.target.value)),
-  onButtonClick: () => dispatch(incrementCounter(reduxKey))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Counter);
+export default connect(null, mapDispatchToProps)(Counter);
