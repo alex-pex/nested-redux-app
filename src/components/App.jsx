@@ -5,10 +5,16 @@ import logo from './logo.svg';
 import './App.css';
 import Counter from './Counter';
 
+const initialState = {
+  app: { title: 'Welcome to DynaRedux' },
+  counter1: { value: 0 },
+  counter2: { value: 0 }
+};
+
 class App extends Component {
   constructor(...args) {
     super(...args);
-    this.store = configureStore();
+    this.store = configureStore(initialState);
     this.store.subscribe(() => this.forceUpdate());
   }
 
