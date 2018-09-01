@@ -16,23 +16,13 @@ let handler;
 const dispatch = async ({ type, ...payload }) => {
   console.log(type, ...payload);
 
-  let updates = [];
-  const setState = update => updates.push(update);
-  const collect = () => {
-    const collectedUpdates = updates;
-    updates = [];
-
-    if (collectedUpdates.length > 0) {
-      appState = collectedUpdates.reduce((nextState, update) => update(nextState), appState);
-      subscribers.map(subscriber => subscriber());
-      console.log('> render', appState);
-    }
+  const setState = update => {
+    appState = update(appState);
+    console.log('> render', appState);
+    subscribers.forEach(subscriber => subscriber());
   };
 
-  const promise = handler(setState, { type, ...payload });
-  collect();
-
-  promise.then(collect);
+  handler(setState, { type, ...payload });
 };
 
 const incrementAction = () => ({
